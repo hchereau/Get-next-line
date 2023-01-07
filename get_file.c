@@ -44,7 +44,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	}
 	return (join);
 }
-	
+
 static void	*ft_bzero(void *s, size_t n)
 {
 	size_t	i;
@@ -57,14 +57,34 @@ static void	*ft_bzero(void *s, size_t n)
 	}
 	return (s);
 }
+char	*get_size(int	fd)
+{
+	size_t	bytes_count;
+	size_t size_string;
+	char	*string_file;
+	char	part_file[BUFFER_SIZE];
 
+	ft_bzero(part_file, BUFFER_SIZE);
+	size_string = 0;
+	bytes_count =read(fd, part_file, BUFFER_SIZE);
+	size_string += bytes_count;
+	while(bytes_count > 0)
+	{
+		string_file = (char *)malloc(sizeof(char) * sizestring);
+		if (string_file == NULL)
+			return NULL;
+		else
+		{
+			
+		}
+	}
+}
 int main(void)
 {
 	int		fd;
-	char	*string_file;
 
 	fd = open("readthis.txt", O_RDONLY);
-	print_file(fd);
+	printf("%s", get_size(fd));
 	close(fd);
 
 }
