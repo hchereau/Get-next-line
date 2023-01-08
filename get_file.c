@@ -1,10 +1,21 @@
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <fcntl.h>
 
 #define BUFFER_SIZE 10
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+size_t	ft_strlen(const char *s)
+{
+	size_t	len;
+
+	len = 0;
+	while (s[len] != '\0')
+		++len;
+	return (len);
+}
+
+static size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 {
 	size_t	i;
 
@@ -21,7 +32,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size)
 	return (ft_strlen(src));
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+static char	*ft_strjoin(char const *s1, char const *s2)
 {
 	size_t	size1;
 	size_t	size2;
@@ -57,34 +68,40 @@ static void	*ft_bzero(void *s, size_t n)
 	}
 	return (s);
 }
-char	*get_size(int	fd)
+
+static void	add_str(char **s1, char *s2)
+{
+	char *p1;
+
+	p1 = *s1;
+	*s1 = ft_strjoin(*s1, s2);
+	free(p1);
+}
+
+char	*get_file(int	fd)
 {
 	size_t	bytes_count;
-	size_t size_string;
 	char	*string_file;
-	char	part_file[BUFFER_SIZE];
+	char	part_file[BUFFER_SIZE + 1];
 
-	ft_bzero(part_file, BUFFER_SIZE);
-	size_string = 0;
-	bytes_count =read(fd, part_file, BUFFER_SIZE);
-	size_string += bytes_count;
+	ft_bzero(part_file, BUFFER_SIZE + 1);
+	bytes_count = read(fd, part_file, BUFFER_SIZE);
+	string_file = NULL;
 	while(bytes_count > 0)
 	{
-		string_file = (char *)malloc(sizeof(char) * sizestring);
-		if (string_file == NULL)
-			return NULL;
-		else
-		{
-			
-		}
+		add_str(&string_file, part_file);
+		bytes_count = read(fd, part_file, BUFFER_SIZE);
 	}
+	return (string_file);
 }
 int main(void)
 {
 	int		fd;
+	char	*file_content;
 
 	fd = open("readthis.txt", O_RDONLY);
-	printf("%s", get_size(fd));
+	file_content = get_file(fd);
+	printf("%s", file_content);
+	free(file_content);	
 	close(fd);
-
 }
