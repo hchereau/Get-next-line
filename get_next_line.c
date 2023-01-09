@@ -6,16 +6,30 @@
 /*   By: hchereau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 15:18:40 by hchereau          #+#    #+#             */
-/*   Updated: 2023/01/08 16:59:49 by hchereau         ###   ########.fr       */
+/*   Updated: 2023/01/09 15:36:03 by hchereau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "get_next_line.h"
 
-
-
-
-
+char	*get_next_line(int fd)
+{
+	static char	*rest = NULL;
+	char		*str_final;
+	char		*buffer;
+	size_t		bytes_count;
+	size_t		is_index;
+	
+	str_final = NULL;
+	str_final = ft_strjoin(str_final, rest);
+	bytes_count = read(fd, buffer, BUFFER_SIZE);
+	is_index = get_index(buffer,'\n');
+	while (is_index == -1)
+	{
+		add_str();
+	}
+	return 
+}
 
 int main(int argc, char **argcv)
 {
@@ -35,7 +49,6 @@ int main(int argc, char **argcv)
 process:
 
 	ajouter le static BUFFER de la ligne precedent au debut de la str final
-	free la ligne precedente
 	read sur BUFFERR size
 	parcourir BUFFER jusqu'a tomber sur \n
 	si pas de \n:
@@ -44,6 +57,25 @@ process:
 	si \n:
 		ajouter \n a str final
 		garder en static suite BUFFER
+
+
+decoupage fonction:
+
+	ft_strjoin()
+		ft_strlcpy()
+		ft_strlen()
+	get_index()
+	ft_bzero()
+
 	
-	
+
+
+get_index
+	goal : recuperer l'indice du \n dans BUFFER, -1 si il n'y en a pas
+	inputs : BUFFER, \n
+	process :
+		-> parcourir la chaine BUFFER
+		-> si \n 
+			return (index)
+		-> return -1
 */
