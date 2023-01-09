@@ -6,11 +6,13 @@
 /*   By: hchereau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 15:18:40 by hchereau          #+#    #+#             */
-/*   Updated: 2023/01/09 15:36:03 by hchereau         ###   ########.fr       */
+/*   Updated: 2023/01/09 17:49:30 by hchereau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+size_t	get_index()
 
 char	*get_next_line(int fd)
 {
@@ -21,13 +23,14 @@ char	*get_next_line(int fd)
 	size_t		is_index;
 	
 	str_final = NULL;
-	str_final = ft_strjoin(str_final, rest);
+	str_final = ft_strnjoin(str_final, rest, ft_strlen(rest));
 	bytes_count = read(fd, buffer, BUFFER_SIZE);
 	is_index = get_index(buffer,'\n');
 	while (is_index == -1)
 	{
-		add_str();
+		add_str(&str_final, buffer, BUFFER_SIZE);
 	}
+	add_str()
 	return 
 }
 
