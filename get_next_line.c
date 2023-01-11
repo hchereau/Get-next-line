@@ -6,7 +6,7 @@
 /*   By: hchereau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 15:18:40 by hchereau          #+#    #+#             */
-/*   Updated: 2023/01/11 13:59:11 by hchereau         ###   ########.fr       */
+/*   Updated: 2023/01/12 00:40:53 by hchereau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,36 +20,12 @@ ssize_t	get_index(char *str, const char c, size_t size)
 	while(i < size)
 	{
 		if (str[i] == c)
+		{
 			return(i);
+		}
 		++i;
 	}
 	return(-1);
-}
-
-int	is_valid_line(char *rest)
-{
-	return (get_index(rest, '\n', ft_strlen(rest)) != -1);
-}
-
-void	add_rest(char **final_str, char *rest)
-{
-	ssize_t	size;
-
-	size = get_index(rest, '\n', ft_strlen(rest));
-	if (size == -1)
-		size = ft_strlen(rest);
-	add_str(final_str, rest, size);
-
-}
-
-void	refresh_rest(char *rest, char *buffer)
-{
-	ssize_t	size;
-
-	size = get_index(rest, '\n', ft_strlen(rest));
-	if (size == -1)
-		size = ft_strlen(rest);
-	ft_strlcpy(rest, buffer + size + 1, BUFFER_SIZE - size);
 }
 
 char	*get_next_line(int fd)
@@ -61,26 +37,29 @@ char	*get_next_line(int fd)
 	ssize_t		index;
 
 	str_final = NULL;
-	if (is_valid_line(rest) == true)
+	index = get_index(rest, '\n', BUFFER_SIZE);
+	if (index != -1)
 	{
-		add_rest(&str_final, rest);
-		refresh_rest(rest, rest + get_index(rest, '\n', BUFFER_SIZE));
+		ft_strlcpy(rest, rest + index + 1, BUFFER_SIZE - index + 1);
 	}
 	else
 	{
-		add_rest(&str_final, rest);
-		ft_bzero(buffer, BUFFER_SIZE + 1);
+		add_str(&str_final, rest, ft_strlen(rest));
 		bytes_count = read(fd, buffer, BUFFER_SIZE);
-		index = get_index(buffer, '\n', bytes_count);
-		while (index == -1 && bytes_count > 0)
+		while(index == -1 && bytes_count > 0)
 		{
-			add_str(&str_final, buffer, bytes_count);
+			add_str(&str_final, buffer, BUFFER_SIZE);
 			bytes_count = read(fd, buffer, BUFFER_SIZE);
-			index = get_index(buffer, '\n', bytes_count);
+			index = get_index(buffer, '\n', BUFFER_SIZE);
 		}
-		add_str(&str_final, buffer, index + 1);
-		refresh_rest(rest, buffer);
-	}
+		if (index != -1)
+		{
+			add_str(&str_final, buffer, index);
+			ft_strlcpy(rest, buffer + index + 1, BUFFER_SIZE - index + 1);
+		}
+		else
+			ft_bzero(rest, BUFFER_SIZE);
+	}	
 	return (str_final);
 }
 
@@ -95,7 +74,7 @@ int main(int argc, char **argv)
 	line = get_next_line(fd);
 	while (line != NULL)
 	{
-		printf("[%s]", line);
+		printf("%s", line);
 		free(line);
 		line = get_next_line(fd);
 	}
@@ -103,28 +82,10 @@ int main(int argc, char **argv)
 }
 
 /*
-process:
-
-ajouter le static BUFFER de la ligne precedent au debut de la str final
-read sur BUFFERR size
-parcourir BUFFER jusqu'a tomber sur \n
-si pas de \n:
-join la str final et le BUFFER sur une nouvelle ligne
-free la ligne precedente
-si \n:
-ajouter \n a str final
-garder en static suite BUFFER
-
-
-
-
-
-
-
-
 process 2:
 
-verifier si pas de \n dans rest(get_index(rest, '\n', BUFFER_SIZE))
+verifier si \n dans rest(get_index(rest, '\n', BUFFER_SIZE))
+	-> malloc str_final 
 	-> ajouter le rest jusqu'a l'index dans str_final
 	-> rest = ce qu'il y a apres le \n jusqu'a la fin du rest (strlcpy)
 	return str_final
@@ -136,13 +97,8 @@ si pas de \n dans rest
 		-> bytes_count = read(fd, buffer, BUFFER_SIZE)
 		-> index = get_index(buffer, '\n', BUFFER_SIZE)
 	-> str_final = add_str(str_final, buffer, index + 1)
-	-> strlcpy(rest, buffer + index, )
-decoupage fonction:
-
-
-
-
-
+	-> strlcpy(rest, buffer + index, BUFFER_SIZE - index)
+-> return(str_final)
 
 
 
