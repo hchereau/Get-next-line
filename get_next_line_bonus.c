@@ -1,16 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 15:18:40 by hchereau          #+#    #+#             */
-/*   Updated: 2023/01/12 14:42:29 by hchereau         ###   ########.fr       */
+/*   Updated: 2023/01/12 14:45:02 by hchereau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+#define FD_TOTAL 1024
 
 size_t	get_index(char *str, const char c, size_t size)
 {
@@ -56,38 +58,21 @@ void	fill_line(char **line, char *rest, size_t index, int fd)
 
 char	*get_next_line(int fd)
 {
-	static char	rest[BUFFER_SIZE + 1] = {0};
+	static char	rest[FD_TOTAL][BUFFER_SIZE + 1] = {0};
 	char		*str_final;
 	ssize_t		index;
 
 	str_final = NULL;
-	if (fd != -1)
+	if (fd < FD_TOTAL && fd > 0)
 	{
-		index = get_index(rest, '\n', BUFFER_SIZE);
-		if (index < BUFFER_SIZE)
-			add_rest(&str_final, rest, rest, index);
-		else
-			fill_line(&str_final, rest, index, fd);
+		if (fd != -1)
+		{
+			index = get_index(rest[fd], '\n', BUFFER_SIZE);
+			if (index < BUFFER_SIZE)
+				add_rest(&str_final, rest[fd], rest[fd], index);
+			else
+				fill_line(&str_final, rest[fd], index, fd);
+		}
 	}
 	return (str_final);
 }
-/*
-int	main(int argc, char **argv)
-{
-	int		fd;
-	char	*line;
-
-	if (argc <= 1)
-		return (EXIT_FAILURE);
-	fd = open(argv[1], O_RDONLY);
-	line = get_next_line(fd);
-	while (line != NULL)
-	{
-		printf("[%s]", line);
-		free(line);
-		line = get_next_line(fd);
-	}
-	close(fd);
-	return (EXIT_SUCCESS);
-}
-*/
