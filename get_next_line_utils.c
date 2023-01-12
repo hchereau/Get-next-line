@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hchereau <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 15:46:10 by hchereau          #+#    #+#             */
-/*   Updated: 2023/01/11 00:46:49 by hchereau         ###   ########.fr       */
+/*   Updated: 2023/01/12 02:51:26 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char	*ft_strnjoin(char const *s1, char const *s2, size_t size)
 
 void	add_str(char **s1, char *s2, size_t size)
 {
-	char *p1;
+	char	*p1;
 
 	if (s2[0] != '\0')
 	{
