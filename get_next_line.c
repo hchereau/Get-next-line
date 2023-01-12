@@ -61,11 +61,14 @@ char	*get_next_line(int fd)
 	ssize_t		index;
 
 	str_final = NULL;
-	index = get_index(rest, '\n', BUFFER_SIZE);
-	if (index < BUFFER_SIZE)
-		add_rest(&str_final, rest, rest, index);
-	else
-		fill_line(&str_final, rest, index, fd);
+	if (fd != -1)
+	{
+		index = get_index(rest, '\n', BUFFER_SIZE);
+		if (index < BUFFER_SIZE)
+			add_rest(&str_final, rest, rest, index);
+		else
+			fill_line(&str_final, rest, index, fd);
+	}
 	return (str_final);
 }
 
