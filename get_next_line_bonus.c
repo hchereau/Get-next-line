@@ -6,7 +6,7 @@
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 15:18:40 by hchereau          #+#    #+#             */
-/*   Updated: 2023/01/12 14:45:02 by hchereau         ###   ########.fr       */
+/*   Updated: 2023/01/12 16:39:45 by hchereau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,12 @@
 
 size_t	get_index(char *str, const char c, size_t size)
 {
-	size_t	i;
+	size_t	index;
 
-	i = 0;
-	while (i < size)
-	{
-		if (str[i] == c)
-		{
-			return (i);
-		}
-		++i;
-	}
-	return (i);
+	index = 0;
+	while (index < size && str[index] != c)
+		++index;
+	return (index);
 }
 
 void	add_rest(char **line, char *dest, char *src, size_t index)
@@ -58,21 +52,18 @@ void	fill_line(char **line, char *rest, size_t index, int fd)
 
 char	*get_next_line(int fd)
 {
-	static char	rest[FD_TOTAL][BUFFER_SIZE + 1] = {0};
+	static char	rest[FD_TOTAL][BUFFER_SIZE + 1] = {{0}};
 	char		*str_final;
 	ssize_t		index;
 
 	str_final = NULL;
-	if (fd < FD_TOTAL && fd > 0)
+	if (fd < FD_TOTAL && fd >= 0)
 	{
-		if (fd != -1)
-		{
-			index = get_index(rest[fd], '\n', BUFFER_SIZE);
-			if (index < BUFFER_SIZE)
-				add_rest(&str_final, rest[fd], rest[fd], index);
-			else
-				fill_line(&str_final, rest[fd], index, fd);
-		}
+		index = get_index(rest[fd], '\n', BUFFER_SIZE);
+		if (index < BUFFER_SIZE)
+			add_rest(&str_final, rest[fd], rest[fd], index);
+		else
+			fill_line(&str_final, rest[fd], index, fd);
 	}
 	return (str_final);
 }
