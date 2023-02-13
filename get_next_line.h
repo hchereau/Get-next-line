@@ -6,7 +6,7 @@
 /*   By: hchereau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 15:03:15 by hchereau          #+#    #+#             */
-/*   Updated: 2023/01/11 00:22:23 by hchereau         ###   ########.fr       */
+/*   Updated: 2023/02/13 21:15:36 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,4 +28,6 @@ size_t			ft_strlcpy(char *dst, const char *src, size_t size);
 char			*ft_strnjoin(char const *s1, char const *s2, size_t size);
 void			add_str(char **s1, char *s2, size_t size);
 void			*ft_bzero(void *s, size_t n);
+char			*get_next_line(int fd);
+
 #endif

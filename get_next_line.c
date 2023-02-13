@@ -6,7 +6,7 @@
 /*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 15:18:40 by hchereau          #+#    #+#             */
-/*   Updated: 2023/02/11 17:13:43 by hchereau         ###   ########.fr       */
+/*   Updated: 2023/02/13 21:40:19 by rbroque          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,8 @@ size_t	get_index(char *str, const char c, size_t size)
 	size_t	i;
 
 	i = 0;
-	while (i < size)
-	{
-		if (str[i] == c)
-		{
-			return (i);
-		}
+	while (i < size && str[i] != '\0' && str[i] != c)
 		++i;
-	}
 	return (i);
 }
 
@@ -39,7 +33,7 @@ void	fill_line(char **line, char *rest, size_t index, int fd)
 	char		buffer[BUFFER_SIZE + 1];
 	size_t		bytes_count;
 
-	add_str(line, rest, ft_strlen(rest));
+	add_rest(line, rest, rest, ft_strlen(rest));
 	ft_bzero(buffer, BUFFER_SIZE + 1);
 	bytes_count = read(fd, buffer, BUFFER_SIZE);
 	index = get_index(buffer, '\n', BUFFER_SIZE);
@@ -64,13 +58,14 @@ char	*get_next_line(int fd)
 	if (fd != -1)
 	{
 		index = get_index(rest, '\n', BUFFER_SIZE);
-		if (index < BUFFER_SIZE)
+		if (index < BUFFER_SIZE && rest[index] == '\n')
 			add_rest(&str_final, rest, rest, index);
 		else
 			fill_line(&str_final, rest, index, fd);
 	}
 	return (str_final);
 }
+
 /*
 int	main(int argc, char **argv)
 {
