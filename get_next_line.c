@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbroque <rbroque@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hchereau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/08 15:18:40 by hchereau          #+#    #+#             */
-/*   Updated: 2023/02/13 21:40:19 by rbroque          ###   ########.fr       */
+/*   Created: 2023/02/15 12:14:55 by hchereau          #+#    #+#             */
+/*   Updated: 2023/02/15 12:14:59 by hchereau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,11 @@ void	fill_line(char **line, char *rest, size_t index, int fd)
 	}
 	if (bytes_count > 0)
 		add_rest(line, rest, buffer, index);
+	if (bytes_count == 0)
+	{
+		add_rest(line, rest, buffer, index);
+		ft_bzero(rest, BUFFER_SIZE + 1);
+	}
 }
 
 char	*get_next_line(int fd)
