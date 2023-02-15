@@ -6,7 +6,7 @@
 /*   By: hchereau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 12:14:55 by hchereau          #+#    #+#             */
-/*   Updated: 2023/02/15 12:27:01 by hchereau         ###   ########.fr       */
+/*   Updated: 2023/02/15 12:55:55 by hchereau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,11 @@ char	*get_next_line(int fd)
 	str_final = NULL;
 	if (fd != -1)
 	{
-		index = get_index(rest, '\n', BUFFER_SIZE);
-		if (index < BUFFER_SIZE && rest[index] == '\n')
-			add_rest(&str_final, rest, rest, index);
+		index = get_index(rest[fd], '\n', BUFFER_SIZE);
+		if (index < BUFFER_SIZE && rest[fd][index] == '\n')
+			add_rest(&str_final, rest[fd], rest[fd], index);
 		else
-			fill_line(&str_final, rest, index, fd);
+			fill_line(&str_final, rest[fd], index, fd);
 	}
 	return (str_final);
 }
